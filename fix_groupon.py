@@ -19,5 +19,15 @@ def grab_skus_upc(row, output_sheet):
 		# SKU
 		output_sheet['CR'+ str(row)] = 'AO-8'
 
+import datetime
+
+def order_dates(row, output_sheet):
+	today = datetime.date.today()
+	tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+	output_sheet['BH'+ str(row)] = today.strftime("%m-%d-%Y")
+	output_sheet['BN'+ str(row)] = tomorrow.strftime("%m-%d-%Y")
+
+
+
 
 
