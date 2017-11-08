@@ -20,12 +20,20 @@ def grab_skus_upc(row, output_sheet):
 		output_sheet['CR'+ str(row)] = 'AO-8'
 
 import datetime
+import openpyxl
 
 def order_dates(row, output_sheet):
 	today = datetime.date.today()
 	tomorrow = datetime.date.today() + datetime.timedelta(days=1)
 	output_sheet['BH'+ str(row)] = today.strftime("%m-%d-%Y")
 	output_sheet['BN'+ str(row)] = tomorrow.strftime("%m-%d-%Y")
+
+def check_errors(row, final_col, output_sheet, error_rows):
+	for col in range(1, final_col):
+		col_letter = openpyxl.cell.cell.get_column_letter(col)
+		if output_sheet[col_letter + str(row)].value == 'IGNORE ME' or output_sheet[col_letter + str(row)].value == 'N/A':
+			error_rows.add(row)
+
 
 
 

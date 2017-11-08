@@ -1,5 +1,5 @@
 ### HANDLING NULLS
-NA ='N/A'
+NA ='NA'
 CA = 'CA'
 
 ### COMMERCEHUB
@@ -99,7 +99,7 @@ commercehub_cols = {'A': None,
  'CP': None,
  'CQ': 'CQ',
  'CR': 'CR',
- 'CS': 'CS'}
+ 'CS': None}
 
  ### GROUPON
 groupon_cols = {'A': None,
@@ -198,7 +198,7 @@ groupon_cols = {'A': None,
  'CP': None,
  'CQ': 'IGNORE ME',
  'CR': 'IGNORE ME',
- 'CS': 'NA'}
+ 'CS': None}
 
  ### STAPLES
 staples_cols = {'A': None,
@@ -297,4 +297,4 @@ staples_cols = {'A': None,
  'CP': None,
  'CQ': 'IGNORE ME',
  'CR': 'M',
- 'CS': NA}
+ 'CS': None}
