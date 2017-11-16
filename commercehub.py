@@ -7,24 +7,19 @@ import datetime
 import sys
 
 # initial state for logic gates
-COMMERCEHUB = True
+COMMERCEHUB = False
 GROUPON = True
 STAPLES = True
 
 # inputs - drop enter in the spreadsheets (commercehub, groupon, staples)
 #input_file = input("Enter the CommerceHub file to be formatted:")
 commerce_file = "CSV 11-03-2017.xlsx"
-groupon_file = 'Groupon 11-08-2017.xlsx'
+groupon_file = 'Groupon 11-10-2017.xlsx'
 staples_file = 'Staples test 11-07-2017.xlsx'
 
 if (COMMERCEHUB == False and GROUPON == False and STAPLES == False):
 	print('No input files entered.')
 	sys.exit()
-
-#input_wb = openpyxl.load_workbook(input_file)
-input_wb = openpyxl.load_workbook(groupon_file)
-#input_wb = openpyxl.load_workbook(staples_file)
-input_sheet = input_wb.active
 
 output_wb = openpyxl.Workbook()
 output_sheet = output_wb.active
@@ -38,6 +33,7 @@ for col in range(1, format_sheet.max_column + 1):
 	col_letter = openpyxl.cell.cell.get_column_letter(col)
 	output_sheet[col_letter + str(1)] = format_sheet[col_letter + str(1)].value
 	output_sheet.column_dimensions[col_letter].width = col_width
+
 final_col = format_sheet.max_column + 1
 
 # row offset for multiple input sheets
