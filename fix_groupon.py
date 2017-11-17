@@ -31,7 +31,8 @@ def order_dates(row, output_sheet):
 def check_errors(row, final_col, output_sheet, error_rows):
 	for col in range(1, final_col):
 		col_letter = openpyxl.cell.cell.get_column_letter(col)
-		if output_sheet[col_letter + str(row)].value == 'IGNORE ME' or output_sheet[col_letter + str(row)].value == 'N/A':
+		if (output_sheet[col_letter + str(row)].value == 'IGNORE ME' or output_sheet[col_letter + str(row)].value == 'N/A'
+			or output_sheet[col_letter + str(row)].value == '0'):
 			error_rows.add(row)
 
 

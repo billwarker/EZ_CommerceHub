@@ -6,7 +6,7 @@ print('Starting...')
 conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Greengiant90',
 						db='mysql', charset='utf8')
 cur = conn.cursor()
-cur.execute('USE star_interactive')
+cur.execute("USE star_interactive")
 
 inventory_file = "lean supply inventory.xlsx" 
 wb = openpyxl.load_workbook(inventory_file)
