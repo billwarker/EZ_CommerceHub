@@ -21,6 +21,7 @@ def grab_skus_upc(row, output_sheet):
 
 import datetime
 import openpyxl
+import pymysql
 
 def order_dates(row, output_sheet):
 	today = datetime.date.today()
@@ -34,6 +35,21 @@ def check_errors(row, final_col, output_sheet, error_rows):
 		if (output_sheet[col_letter + str(row)].value == 'IGNORE ME' or output_sheet[col_letter + str(row)].value == 'N/A'
 			or output_sheet[col_letter + str(row)].value == '0'):
 			error_rows.add(row)
+
+def mysql_lookup(row, output_sheet, cur):
+	row_sku = output_sheet["CR" + str(row)].value
+	query = """SELECT upc FROM lean_supply WHERE sku = "{}"; """
+	try:
+		cur.execute(query.format(row_sku))
+		row_upc = cur.fetchone()[0]
+		#print(query.format(row_sku))
+		print('Grabbed UPC from database for', row_sku)
+		output_sheet["CQ" + str(row)] = str(row_upc)
+	except Exception as e:
+		print(e)
+
+
+
 
 
 

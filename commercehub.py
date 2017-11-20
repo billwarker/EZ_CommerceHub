@@ -5,17 +5,26 @@ from dicts import *
 from fix_groupon import *
 import datetime
 import sys
+import pymysql
 
 # initial state for logic gates
 COMMERCEHUB = False
 GROUPON = True
 STAPLES = True
 
+# connect to db for SKUs and UPCs
+conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Greengiant90',
+						db='mysql', charset='utf8')
+cur = conn.cursor()
+cur.execute("USE star_interactive")
+
 # inputs - drop enter in the spreadsheets (commercehub, groupon, staples)
 #input_file = input("Enter the CommerceHub file to be formatted:")
 commerce_file = "CSV 11-03-2017.xlsx"
 groupon_file = 'Groupon 11-10-2017.xlsx'
 staples_file = 'Staples test 11-07-2017.xlsx'
+
+# check for inputs
 
 if (COMMERCEHUB == False and GROUPON == False and STAPLES == False):
 	print('No input files entered.')
@@ -61,6 +70,7 @@ if COMMERCEHUB == True:
 			else:
 				output_sheet[col_letter + str(row)] = str(input_sheet[commercehub_cols[col_letter] + str(row)].value)
 		order_dates(row, output_sheet)
+		mysql_lookup(row, output_sheet, cur)
 		check_errors(row, final_col, output_sheet, error_rows)
 	offset += last_row - 1
 
@@ -90,6 +100,7 @@ if GROUPON == True:
 				pass
 		grab_skus_upc(row + offset, output_sheet)
 		order_dates(row + offset, output_sheet)
+		mysql_lookup(row + offset, output_sheet, cur)
 		check_errors((row + offset), final_col, output_sheet, error_rows)
 	offset += last_row - 1
 
@@ -119,6 +130,7 @@ if STAPLES == True:
 				pass
 		#grab_skus_upc(row, output_sheet) <------ Aroma Oils Fix
 		order_dates(row + offset, output_sheet)
+		mysql_lookup(row + offset, output_sheet, cur)
 		check_errors((row + offset), final_col, output_sheet, error_rows)
 	offset += last_row - 1
 
@@ -130,3 +142,6 @@ print('Total SKUs:', output_sheet.max_row - 1)
 print('-----')
 for row in error_rows:
 	print('WARNING! Potential error on row', row)
+
+cur.close()
+conn.close()

@@ -51,8 +51,3 @@ print('Failed SKUs:')
 if failed_skus > 0:
 	for sku in failed_skus:
 		print(sku[0], sku[1])
-
-
-
-
-
