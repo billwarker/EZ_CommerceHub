@@ -3,9 +3,9 @@ NA ='NA'
 CA = 'CA'
 
 ### COMMERCEHUB
-commercehub_cols = {'A': None,
+commercehub_dict = {'A': None,
  'B': 'B',
- 'C': 'IGNORE ME',
+ 'C': None,
  'D': None,
  'E': 'E',
  'F': 'L',
@@ -102,7 +102,7 @@ commercehub_cols = {'A': None,
  'CS': None}
 
  ### GROUPON
-groupon_cols = {'A': None,
+groupon_dict = {'A': None,
  'B': 'I',
  'C': None,
  'D': None,
@@ -201,7 +201,7 @@ groupon_cols = {'A': None,
  'CS': None}
 
  ### STAPLES
-staples_cols = {'A': None,
+staples_dict = {'A': None,
  'B': 'AD', # Address Line 1
  'C': 'AE', # Address Line 2
  'D': None,
