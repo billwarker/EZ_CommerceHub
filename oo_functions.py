@@ -1,23 +1,48 @@
-# def grab_skus_upc(row, output_sheet):
-# 	product_desc = output_sheet['AM'+ str(row)].value
-# 	#print(product_desc)
-# 	if product_desc.endswith('(14 Pack)'):
-# 		# UPC
-# 		output_sheet['CQ'+ str(row)] = '743724486834'
-# 		# SKU
-# 		output_sheet['CR'+ str(row)] = 'AO-14'
+def _grab_skus_upc(row, output_sheet):
+	product_desc = output_sheet['AM'+ str(row)].value
+	#print(product_desc)
+	if product_desc.endswith('(14 Pack)'):
+		# UPC
+		output_sheet['CQ'+ str(row)] = '743724486834'
+		# SKU
+		output_sheet['CR'+ str(row)] = 'AO-14'
 
-# 	elif product_desc.endswith('(6 Pack)'):
-# 		# UPC
-# 		output_sheet['CQ'+ str(row)] = '743724486827'
-# 		# SKU
-# 		output_sheet['CR'+ str(row)] = 'AO-6'
+	elif product_desc.endswith('(6 Pack)'):
+		# UPC
+		output_sheet['CQ'+ str(row)] = '743724486827'
+		# SKU
+		output_sheet['CR'+ str(row)] = 'AO-6'
 
-# 	elif product_desc.endswith('Set'):
-# 		# UPC
-# 		output_sheet['CQ'+ str(row)] = '743724487237'
-# 		# SKU
-# 		output_sheet['CR'+ str(row)] = 'AO-8'
+	elif product_desc.endswith('Set'):
+		# UPC
+		output_sheet['CQ'+ str(row)] = '743724487237'
+		# SKU
+		output_sheet['CR'+ str(row)] = 'AO-8'
+
+	elif product_desc.startswith('AD-200'):
+		# UPC
+		output_sheet['CQ'+ str(row)] = 'IGNORE ME'
+		# SKU
+		output_sheet['CR'+ str(row)] = 'AD-200'
+
+	elif product_desc.startswith('S330'):
+		# UPC
+		output_sheet['CQ'+ str(row)] = 'IGNORE ME'
+		# SKU
+		output_sheet['CR'+ str(row)] = 'S330'
+
+	elif product_desc.startswith('S625'):
+		# UPC
+		output_sheet['CQ'+ str(row)] = 'IGNORE ME'
+		# SKU
+		output_sheet['CR'+ str(row)] = 'S625'
+
+	elif product_desc.startswith('OI100R'):
+		# UPC
+		output_sheet['CQ'+ str(row)] = 'IGNORE ME'
+		# SKU
+		output_sheet['CR'+ str(row)] = 'OI-100R'	
+
 
 import datetime
 import openpyxl
@@ -68,8 +93,10 @@ def process_sheet(wb_file, final_col, output_sheet, vendor_dict, offset, cur, er
 			except Exception as e:
 				print(e)
 		_order_dates((row + offset), output_sheet)
+		_grab_skus_upc(row + offset, output_sheet)
 		_mysql_lookup((row + offset), output_sheet, cur)
 		_check_errors((row + offset), final_col, output_sheet, error_rows)
+
 	offset += last_row - 1
 
 	return output_sheet, offset, error_rows
