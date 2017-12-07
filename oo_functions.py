@@ -47,7 +47,7 @@ def _grab_skus_upc(row, output_sheet):
 import datetime
 import openpyxl
 import pymysql
-from dicts import *
+from oo_dicts import *
 
 def _order_dates(row, output_sheet):
 	today = datetime.date.today()

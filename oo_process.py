@@ -1,8 +1,8 @@
 import openpyxl
 import csv
 import time
-from dicts import *
-from fix_groupon import *
+from oo_dicts import *
+from oo_functions import *
 import datetime
 import sys
 import pymysql
@@ -19,7 +19,7 @@ def process_output(groupon_file, commerce_file, staples_file):
 
 	# write columns for new output wb, set col. width
 	col_width = 20
-	format_file = "FORMAT SHEET.xlsx" # Always use this spreadsheet as the template for the column names/formatting
+	format_file = "oo_formatSheet.xlsx" # Always use this spreadsheet as the template for the column names/formatting
 	format_wb = openpyxl.load_workbook(format_file)
 	format_sheet = format_wb.active
 	for col in range(1, format_sheet.max_column + 1):

@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (QMainWindow, QPushButton, QLabel,
 from PyQt5.QtGui import (QIcon, QColor)
 from PyQt5.QtCore import QObject, pyqtSignal
 import os
-import process_sheet
+import oo_process
 #from PyQt5.QtWidgets import *
 #from PyQt5.QtGui import *
 
@@ -103,7 +103,7 @@ class OrderOpener(QMainWindow):
 	def processing(self):
 		if self.sheetCheck:
 			self.statusBar().showMessage('Processing sheet...')
-			process_sheet.process_output(self.grouponPath, self.commercehubPath,
+			oo_process.process_output(self.grouponPath, self.commercehubPath,
 				self.staplesPath)
 			self.statusBar().showMessage('Done!')
 
