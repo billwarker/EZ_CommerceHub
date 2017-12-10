@@ -1,5 +1,5 @@
 ### HANDLING NULLS
-NA ='NA'
+NA = None
 CA = 'CA'
 
 ### COMMERCEHUB
@@ -75,9 +75,9 @@ commercehub_dict = {'A': None,
  'BR': 'B',
  'BS': None,
  'BT': None,
- 'BU': None,
+ 'BU': 'E',
  'BV': None,
- 'BW': 'E',
+ 'BW': CA,
  'BX': 'R',
  'BY': 'US',
  'BZ': NA,

@@ -6,6 +6,7 @@ from oo_functions import *
 import datetime
 import sys
 import pymysql
+import os
 
 def process_output(groupon_file, commerce_file, staples_file):
 	# connect to db for SKUs and UPCs
@@ -36,20 +37,26 @@ def process_output(groupon_file, commerce_file, staples_file):
 
 	if commerce_file:
 		print('Adding CommerceHub')
-		output_sheet, offset, error_rows = process_sheet(commerce_file, final_col, output_sheet, commercehub_dict, offset, cur, error_rows)
+		output_sheet, offset, error_rows = process_sheet(commerce_file, final_col, output_sheet, commercehub_dict,
+			offset, cur, error_rows)
 
 	if groupon_file:
 		print('Adding Groupon')
-		output_sheet, offset, error_rows = process_sheet(groupon_file, final_col, output_sheet, groupon_dict, offset, cur, error_rows)
+		output_sheet, offset, error_rows = process_sheet(groupon_file, final_col, output_sheet, groupon_dict,
+			offset, cur, error_rows, groupon_true=True)
 
 	if staples_file:
 		print('Adding Staples')
-		output_sheet, offset, error_rows = process_sheet(staples_file, final_col, output_sheet, staples_dict, offset, cur, error_rows)
+		output_sheet, offset, error_rows = process_sheet(staples_file, final_col, output_sheet, staples_dict,
+			offset, cur, error_rows)
 
 
 	today = datetime.date.today()
 	output_file = today.strftime("%m-%d-%Y") + " ORDERS.xlsx"
-	output_wb.save(output_file)
+	dir_path = os.path.join(os.getcwd(), 'Output Sheets')
+	os.makedirs(dir_path, exist_ok=True)
+	output_wb.save(os.path.join(dir_path, output_file))
+	
 	print('Done.')
 	print('Total SKUs:', output_sheet.max_row - 1)
 	print('-----')

@@ -74,7 +74,8 @@ def _mysql_lookup(row, output_sheet, cur):
 	except Exception as e:
 		print(e)
 
-def process_sheet(wb_file, final_col, output_sheet, vendor_dict, offset, cur, error_rows):
+def process_sheet(wb_file, final_col, output_sheet, vendor_dict,
+	offset, cur, error_rows, groupon_true=False):
 	input_wb = openpyxl.load_workbook(wb_file)
 	input_sheet = input_wb.active
 	last_row = input_sheet.max_row
@@ -89,11 +90,12 @@ def process_sheet(wb_file, final_col, output_sheet, vendor_dict, offset, cur, er
 				 or vendor_dict[col_letter] == 'IGNORE ME' or vendor_dict[col_letter] == 'Groupon' or vendor_dict[col_letter] == 'Staples'):
 					output_sheet[col_letter + str(row + offset)] = vendor_dict[col_letter]
 				else:
-					output_sheet[col_letter + str(row + offset)] = input_sheet[vendor_dict[col_letter] + str(row)].value
+					output_sheet[col_letter + str(row + offset)] = str(input_sheet[vendor_dict[col_letter] + str(row)].value)
 			except Exception as e:
 				print(e)
 		_order_dates((row + offset), output_sheet)
-		_grab_skus_upc(row + offset, output_sheet)
+		if groupon_true:
+			_grab_skus_upc(row + offset, output_sheet)
 		_mysql_lookup((row + offset), output_sheet, cur)
 		_check_errors((row + offset), final_col, output_sheet, error_rows)
 
