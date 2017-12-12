@@ -1,10 +1,7 @@
-CREATE DATABASE star_interactive;
-
-USE star_interactive;
-
-CREATE TABLE lean_supply
-(id INT NOT NULL AUTO_INCREMENT,
-sku VARCHAR(255),
+CREATE TABLE inventory
+(item_num INT PRIMARY KEY NOT NULL,
+item_sku VARCHAR(255),
 item_desc VARCHAR(255),
-upc BIGINT,
-PRIMARY KEY (id));
+item_inv INT,
+item_upc BIGINT
+);

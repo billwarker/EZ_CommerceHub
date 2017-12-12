@@ -64,9 +64,9 @@ def _check_errors(row, final_col, output_sheet, error_rows):
 
 def _mysql_lookup(row, output_sheet, cur):
 	row_sku = output_sheet["CR" + str(row)].value
-	query = """SELECT upc FROM lean_supply WHERE sku = "{}"; """
 	try:
-		cur.execute(query.format(row_sku))
+		cur.execute("SELECT item_upc FROM inventory WHERE item_sku = ?;",
+			(row_sku,))
 		row_upc = cur.fetchone()[0]
 		#print(query.format(row_sku))
 		print('Grabbed UPC from database for', row_sku)

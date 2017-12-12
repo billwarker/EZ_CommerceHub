@@ -5,15 +5,14 @@ from oo_dicts import *
 from oo_functions import *
 import datetime
 import sys
+import sqlite3
 import pymysql
 import os
 
 def process_output(groupon_file, commerce_file, staples_file):
 	# connect to db for SKUs and UPCs
-	conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Greengiant90',
-							db='mysql', charset='utf8')
+	conn = sqlite3.connect('star_interactive.db')
 	cur = conn.cursor()
-	cur.execute("USE star_interactive")
 
 	output_wb = openpyxl.Workbook()
 	output_sheet = output_wb.active
