@@ -43,11 +43,12 @@ def _grab_skus_upc(row, output_sheet):
 		# SKU
 		output_sheet['CR'+ str(row)] = 'OI-100R'	
 
-
+import os
 import datetime
 import openpyxl
 import pymysql
 from oo_dicts import *
+import csv
 
 def _order_dates(row, output_sheet):
 	today = datetime.date.today()
@@ -76,8 +77,7 @@ def _mysql_lookup(row, output_sheet, cur):
 
 def process_sheet(wb_file, final_col, output_sheet, vendor_dict,
 	offset, cur, error_rows, groupon_true=False):
-	input_wb = openpyxl.load_workbook(wb_file)
-	input_sheet = input_wb.active
+	input_sheet = _csv_check(wb_file)
 	last_row = input_sheet.max_row
 	print('SKUs:', last_row - 1)
 	for row in range(2, last_row + 1):
@@ -102,3 +102,23 @@ def process_sheet(wb_file, final_col, output_sheet, vendor_dict,
 	offset += last_row - 1
 
 	return output_sheet, offset, error_rows
+
+def _csv_check(file):
+	if file.endswith('.csv'):
+		print('Converting {} to .xlsx format...'.format(file))
+		file_name = file.split('.csv')[0]
+		wb = openpyxl.Workbook()
+		sheet = wb.active
+
+		with open(file, 'r') as f:
+			reader = csv.reader(f)
+			for r, row in enumerate(reader):
+				for c, col in enumerate(row):
+						cell = sheet.cell(row=r+1, column=c+1)
+						cell.value = col
+		return sheet
+	else:
+		wb = openpyxl.load_workbook(file)
+		sheet = wb.active
+
+		return sheet

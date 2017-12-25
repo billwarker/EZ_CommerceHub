@@ -21,13 +21,19 @@ class OrderOpener(QMainWindow):
 
 	def initUI(self):
 
+		# Menu Bar
 		menubar = self.menuBar()
 		optionMenu = menubar.addMenu('Options')
+		
+		# Clear Sheets
+		clearSheetsAct = QAction('Clear Sheets', self)
+		clearSheetsAct.triggered.connect(self.clear_sheets)
+		optionMenu.addAction(clearSheetsAct)
 
 		statusbar = self.statusBar()
 		statusbar.showMessage('No sheets added.')
 
-		grey = QColor(200, 200, 200)
+		self.grey = QColor(200, 200, 200)
 		self.dark_grey = QColor(170, 170, 170)
 		program_w = 500
 		program_h = program_w / 2
@@ -39,7 +45,7 @@ class OrderOpener(QMainWindow):
 		# Groupon
 		self.grouponBox = QFrame(self)
 		self.grouponBox.setStyleSheet("QWidget { background-color: %s}" %
-			grey.name())
+			self.grey.name())
 		self.grouponBox.setGeometry(box_offset, box_h, box_dim, box_dim)
 		self.grouponLabel = QLabel('Groupon', self)
 		self.grouponLabel.move(box_offset + 17, label_height)
@@ -50,7 +56,7 @@ class OrderOpener(QMainWindow):
 		# CommerceHub
 		self.commerceBox = QFrame(self)
 		self.commerceBox.setStyleSheet("QWidget { background-color: %s}" %
-			grey.name())
+			self.grey.name())
 		commerceBox_w = (program_w/2) - (box_dim/2)
 		self.commerceBox.setGeometry(commerceBox_w, box_h, box_dim, box_dim)
 		self.commerceLabel = QLabel('CommerceHub', self)
@@ -62,7 +68,7 @@ class OrderOpener(QMainWindow):
 		# Staples
 		self.staplesBox = QFrame(self)
 		self.staplesBox.setStyleSheet("QWidget { background-color: %s}" %
-			grey.name())
+			self.grey.name())
 		staplesBox_w = (program_w - box_dim - box_offset)
 		self.staplesBox.setGeometry(staplesBox_w, box_h, box_dim, box_dim)
 		self.staplesLabel = QLabel('Staples', self)
@@ -131,6 +137,20 @@ class OrderOpener(QMainWindow):
 
 		else:
 			self.statusBar().showMessage('No sheets to process!')
+
+	def clear_sheets(self):
+		self.sheetCheck = False
+		self.grouponPath = None
+		self.commercehubPath = None
+		self.staplesPath = None
+		self.grouponBox.setStyleSheet("QWidget { background-color: %s}" %
+		self.grey.name())
+		self.commerceBox.setStyleSheet("QWidget { background-color: %s}" %
+		self.grey.name())
+		self.staplesBox.setStyleSheet("QWidget { background-color: %s}" %
+		self.grey.name())
+		self.statusBar().showMessage('Sheets cleared!')
+
 
 if __name__ == '__main__':
 	
