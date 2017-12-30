@@ -33,10 +33,11 @@ class OrderOpener(QMainWindow):
 		statusbar = self.statusBar()
 		statusbar.showMessage('No sheets added.')
 
+		# High Level Variables
 		self.grey = QColor(200, 200, 200)
 		self.dark_grey = QColor(170, 170, 170)
-		program_w = 500
-		program_h = program_w / 2
+		program_w = 700
+		program_h = 250
 		box_dim = 80
 		label_height = 90
 		box_h = 65
@@ -57,13 +58,28 @@ class OrderOpener(QMainWindow):
 		self.commerceBox = QFrame(self)
 		self.commerceBox.setStyleSheet("QWidget { background-color: %s}" %
 			self.grey.name())
-		commerceBox_w = (program_w/2) - (box_dim/2)
+		commerceBox_w = (program_w/2) - (box_dim) - (box_dim/2) + (box_dim - box_offset) - (program_w/box_offset)
 		self.commerceBox.setGeometry(commerceBox_w, box_h, box_dim, box_dim)
 		self.commerceLabel = QLabel('CommerceHub', self)
 		self.commerceLabel.move(commerceBox_w + 5, label_height)
 
 		self.commerceBox.mouseReleaseEvent = self.loadCommerceHub
 		self.commerceLabel.mouseReleaseEvent = self.loadCommerceHub
+
+		# CommerceHub (CA)
+		self.commerce2Box = QFrame(self)
+		self.commerce2Box.setStyleSheet("QWidget { background-color: %s}" %
+			self.grey.name())
+		commerce2Box_w = (program_w/2) + (box_dim/2) - (box_dim - box_offset) + (program_w/box_offset)
+		self.commerce2Box.setGeometry(commerce2Box_w, box_h, box_dim, box_dim)
+		self.commerce2Label1 = QLabel('CommerceHub', self)
+		self.commerce2Label1.move(commerce2Box_w + 5, label_height)
+		self.commerce2Label2 = QLabel('(CA)', self)
+		self.commerce2Label2.move(commerce2Box_w + (box_dim/2) - 12, label_height + 12)
+
+		self.commerce2Box.mouseReleaseEvent = self.loadCommerceHub2
+		self.commerce2Label1.mouseReleaseEvent = self.loadCommerceHub2
+		self.commerce2Label2.mouseReleaseEvent = self.loadCommerceHub2
 		
 		# Staples
 		self.staplesBox = QFrame(self)
@@ -116,6 +132,18 @@ class OrderOpener(QMainWindow):
 			self.commerceBox.setStyleSheet("QWidget { background-color: %s}" %
 			self.dark_grey.name())
 
+	def loadCommerceHub2(self, event):
+
+		fname = QFileDialog.getOpenFileName(self, 'Open file', '/')
+
+		if fname[0]:
+			var_path = fname[0]
+			self.sheetCheck = True
+			self.commercehub2Path = os.path.abspath(var_path)
+			self.statusBar().showMessage('CommerceHub (CA) added!')
+			self.commerce2Box.setStyleSheet("QWidget { background-color: %s}" %
+			self.dark_grey.name())
+
 	def loadStaples(self, event):
 
 		fname = QFileDialog.getOpenFileName(self, 'Open file', '/')
@@ -142,10 +170,13 @@ class OrderOpener(QMainWindow):
 		self.sheetCheck = False
 		self.grouponPath = None
 		self.commercehubPath = None
+		self.commercehub2Path = None
 		self.staplesPath = None
 		self.grouponBox.setStyleSheet("QWidget { background-color: %s}" %
 		self.grey.name())
 		self.commerceBox.setStyleSheet("QWidget { background-color: %s}" %
+		self.grey.name())
+		self.commerce2Box.setStyleSheet("QWidget { background-color: %s}" %
 		self.grey.name())
 		self.staplesBox.setStyleSheet("QWidget { background-color: %s}" %
 		self.grey.name())

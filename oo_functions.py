@@ -41,7 +41,13 @@ def _grab_skus_upc(row, output_sheet):
 		# UPC
 		output_sheet['CQ'+ str(row)] = 'IGNORE ME'
 		# SKU
-		output_sheet['CR'+ str(row)] = 'OI-100R'	
+		output_sheet['CR'+ str(row)] = 'OI-100R'
+
+	elif product_desc.startswith('OI200'):
+		# UPC
+		output_sheet['CQ'+ str(row)] = 'IGNORE ME'
+		# SKU
+		output_sheet['CR'+ str(row)] = 'OI-200'
 
 import os
 import datetime
