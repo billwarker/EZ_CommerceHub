@@ -1,6 +1,6 @@
 # SI_OrderOpener
 
-<img src="SI_OrderOpener\oo_pic.PNG"></img>
+<img src="SI_OrderOpener/oo_pic.PNG"></img>
 
 A GUI application to automate the opening of orders to Lean Supply warehouse. Takes order sheets from CommerceHub (Walmart, Best Buy, Staples) and Groupon as inputs and combines them into a single output sheet formatted in a way that Lean Supply will accept. Connects to a MySQL database to fetch information on SKU and UPC codes.
  
