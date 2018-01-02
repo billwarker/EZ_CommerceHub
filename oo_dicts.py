@@ -4,51 +4,51 @@ CA = 'CA'
 
 ### COMMERCEHUB
 commercehub_dict = {'A': None,
- 'B': 'B',
+ 'B': 'BR', 						# Bill To Address
  'C': None,
  'D': None,
- 'E': 'E',
- 'F': 'L',
- 'G': 'G',
- 'H': 'G',
- 'I': NA,
- 'J': NA,
- 'K': NA,
- 'L': 'L',
+ 'E': 'BU',							# Bill to City
+ 'F': 'L',							# Bill to Company Name
+ 'G': None,							# Bill to Country
+ 'H': None,							# Bill to County
+ 'I': NA,							
+ 'J': 'BZ',							# Bill to Day Phone
+ 'K': 'CA',							# Bill to Email
+ 'L': 'CD',							# Bill to Name
  'M': None,
  'N': None,
  'O': None,
- 'P': 'P',
+ 'P': 'CF',							# Bill to Postal Code
  'Q':None,
- 'R': 'R',
+ 'R': 'CH',							# Bill to State
  'S':None,
  'T':None,
  'U':None,
- 'V': 'B',
+ 'V': None,							
  'W':None,
  'X':None,
- 'Y': 'E',
- 'Z': 'L',
- 'AA': 'G',
+ 'Y': None,							
+ 'Z': None,
+ 'AA': None,
  'AB': 'E',
  'AC': NA,
  'AD': NA,
  'AE': 'L',
  'AF': None,
  'AG': None,
- 'AH': NA,
- 'AI': 'AI',
- 'AJ': 'P',
+ 'AH': None,
+ 'AI': 'AI',						# Customer Order Number
+ 'AJ': None,
  'AK': None,
- 'AL': 'R',
- 'AM': 'AM',
- 'AN': None,
+ 'AL': None,
+ 'AM': 'AM',						# Description
+ 'AN': 'AN',						# Description 2 (French?)
  'AO': None,
  'AP': None,
  'AQ': None,
- 'AR': None,
- 'AS': None,
- 'AT': None,
+ 'AR': 'AR',						# Insert Date
+ 'AS': 'AS',						# Insert Date/Time
+ 'AT': 'AT',						# Line Count 
  'AU': None,
  'AV': None,
  'AW': None,
@@ -58,37 +58,37 @@ commercehub_dict = {'A': None,
  'BA': None,
  'BB': None,
  'BC': None,
- 'BD': 'BD',
+ 'BD': 'BD',						# Merchant
  'BE': None,
  'BF': None,
  'BG': None,
- 'BH': 'BH',
+ 'BH': 'BH',						# Order Date
  'BI': 'AI',
  'BJ': None,
- 'BK': 'AI',
+ 'BK': 'BK',						# PO Number
  'BL': None,
- 'BM': 'BM',
- 'BN': 'BN',
+ 'BM': 'BM',						# Quantity
+ 'BN': None,
  'BO': None,
  'BP': None,
- 'BQ': 'BQ',
- 'BR': 'B',
- 'BS': None,
- 'BT': None,
- 'BU': 'E',
+ 'BQ': 'BQ',						# Shipping Method
+ 'BR': 'BR',						# Ship to Address
+ 'BS': 'BS',						# Ship to Address 2
+ 'BT': 'BT',						# Ship to Address 3
+ 'BU': 'BU',						# Ship to City
  'BV': None,
  'BW': CA,
- 'BX': 'R',
- 'BY': 'US',
- 'BZ': NA,
- 'CA': NA,
- 'CB': 'L',
- 'CC': 'L',
- 'CD': 'L',
- 'CE': NA,
- 'CF': 'P',
+ 'BX': None,
+ 'BY': 'US',						# Ship to Customer Number
+ 'BZ': 'BZ',						# Ship to Day Phone
+ 'CA': 'CA',						# Ship to Email
+ 'CB': 'CB',						# Ship to First Name
+ 'CC': 'CC',						# Ship to Last Name
+ 'CD': 'CD',						# Ship to Full Name
+ 'CE': None,
+ 'CF': 'CF',						# Ship to Postal Code
  'CG': None,
- 'CH': 'R',
+ 'CH': 'CH',						# Ship to Province
  'CI': None,
  'CJ': None,
  'CK': None,
@@ -97,8 +97,8 @@ commercehub_dict = {'A': None,
  'CN': None,
  'CO': None,
  'CP': None,
- 'CQ': 'CQ',
- 'CR': 'CR',
+ 'CQ': 'CQ',						# UPC
+ 'CR': 'CR',						# Vendor SKU
  'CS': None}
 
  ### GROUPON
