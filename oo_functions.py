@@ -65,7 +65,7 @@ def _order_dates(row, output_sheet):
 def _check_errors(row, final_col, output_sheet, error_rows):
 	for col in range(1, final_col):
 		col_letter = openpyxl.cell.cell.get_column_letter(col)
-		if (output_sheet[col_letter + str(row)].value == 'IGNORE ME' or output_sheet[col_letter + str(row)].value == 'N/A'
+		if (output_sheet[col_letter + str(row)].value == 'IGNORE ME' or output_sheet[col_letter + str(row)].value == 'NA'
 			or output_sheet[col_letter + str(row)].value == '0'):
 			error_rows.add(row)
 
@@ -82,8 +82,12 @@ def _mysql_lookup(row, output_sheet, cur):
 		print(e)
 
 def process_sheet(wb_file, final_col, output_sheet, vendor_dict,
-	offset, cur, error_rows, groupon_true=False):
+	offset, cur, error_rows, groupon_true=False, commerce_true=False):
 	input_sheet = _csv_check(wb_file)
+	
+	if commerce_true:
+		input_sheet = _commerce_filter(input_sheet)
+
 	last_row = input_sheet.max_row
 	print('SKUs:', last_row - 1)
 	for row in range(2, last_row + 1):
@@ -100,8 +104,10 @@ def process_sheet(wb_file, final_col, output_sheet, vendor_dict,
 			except Exception as e:
 				print(e)
 		_order_dates((row + offset), output_sheet)
+		
 		if groupon_true:
 			_grab_skus_upc(row + offset, output_sheet)
+
 		_mysql_lookup((row + offset), output_sheet, cur)
 		_check_errors((row + offset), final_col, output_sheet, error_rows)
 
@@ -128,3 +134,27 @@ def _csv_check(file):
 		sheet = wb.active
 
 		return sheet
+
+### CommerceHub Processing
+
+def _commerce_filter(input_sheet):
+	print('Filtering out acknowledged, invoiced, and closed orders...')
+	wb = openpyxl.Workbook()
+	filtered_sheet = wb.active
+	filtered_row = 2
+	count = 0
+
+	for row in range(input_sheet.min_row, input_sheet.max_row + 1):
+		line_status = input_sheet['AY' + str(row)].value
+		status = input_sheet['CI' + str(row)].value
+		sub_status = input_sheet['CJ' + str(row)].value
+		
+		if line_status == 'new':
+			if status == 'undelivered' and sub_status == 'undelivered':
+				for col in range(1, input_sheet.max_column + 1):
+					col_letter = openpyxl.cell.cell.get_column_letter(col)
+					filtered_sheet[col_letter + str(filtered_row)] = input_sheet[col_letter + str(row)].value
+				filtered_row += 1
+				count += 1
+	print('Found {} open orders.'.format(count))
+	return filtered_sheet

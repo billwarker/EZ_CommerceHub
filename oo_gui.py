@@ -16,6 +16,7 @@ class OrderOpener(QMainWindow):
 		self.sheetCheck = False
 		self.grouponPath = None
 		self.commercehubPath = None
+		self.commercehub2Path = None
 		self.staplesPath = None
 		self.initUI()
 
@@ -160,7 +161,7 @@ class OrderOpener(QMainWindow):
 		if self.sheetCheck:
 			self.statusBar().showMessage('Processing sheet...')
 			oo_process.process_output(self.grouponPath, self.commercehubPath,
-				self.staplesPath)
+				self.staplesPath, self.commercehub2Path)
 			self.statusBar().showMessage('Done!')
 
 		else:

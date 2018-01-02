@@ -9,7 +9,7 @@ import sqlite3
 import pymysql
 import os
 
-def process_output(groupon_file, commerce_file, staples_file):
+def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 	# connect to db for SKUs and UPCs
 	conn = sqlite3.connect('star_interactive.db')
 	cur = conn.cursor()
@@ -37,7 +37,13 @@ def process_output(groupon_file, commerce_file, staples_file):
 	if commerce_file:
 		print('Adding CommerceHub')
 		output_sheet, offset, error_rows = process_sheet(commerce_file, final_col, output_sheet, commercehub_dict,
-			offset, cur, error_rows)
+			offset, cur, error_rows, commerce_true=True)
+
+	if commerce2_file:
+		print('Adding CommerceHub (CA)')
+		output_sheet, offset, error_rows = process_sheet(commerce2_file, final_col, output_sheet, commercehub_dict,
+			offset, cur, error_rows, commerce_true=True)
+
 
 	if groupon_file:
 		print('Adding Groupon')
