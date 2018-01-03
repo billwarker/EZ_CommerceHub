@@ -14,7 +14,7 @@ A GUI application to automate the opening of orders to Lean Supply warehouse. Ta
    - Generate report of backorders in each order
    - Running memory of backorders across time (weekly?)
 - Add menubar options to update database
-- Create MySQL table for Groupon descriptions and associated SKUs, add option to update to menubar
+- Create db table for Groupon descriptions and associated SKUs, add option to update to menubar
 - Update db, fetch excel sheet from Lean Supply
 
 
