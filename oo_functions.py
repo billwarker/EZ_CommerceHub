@@ -1,3 +1,10 @@
+import os
+import datetime
+import openpyxl
+import pymysql
+from oo_dicts import *
+import csv
+
 def _grab_skus_upc(row, output_sheet):
 	product_desc = output_sheet['AM'+ str(row)].value
 	#print(product_desc)
@@ -49,13 +56,6 @@ def _grab_skus_upc(row, output_sheet):
 		# SKU
 		output_sheet['CR'+ str(row)] = 'OI-200'
 
-import os
-import datetime
-import openpyxl
-import pymysql
-from oo_dicts import *
-import csv
-
 def _order_dates(row, output_sheet):
 	today = datetime.date.today()
 	tomorrow = datetime.date.today() + datetime.timedelta(days=1)
@@ -65,7 +65,7 @@ def _order_dates(row, output_sheet):
 def _check_errors(row, final_col, output_sheet, error_rows):
 	for col in range(1, final_col):
 		col_letter = openpyxl.cell.cell.get_column_letter(col)
-		if (output_sheet[col_letter + str(row)].value == 'IGNORE ME' or output_sheet[col_letter + str(row)].value == 'NA'
+		if (output_sheet[col_letter + str(row)].value == 'IGNORE ME' or output_sheet[col_letter + str(row)].value == 'N/A'
 			or output_sheet[col_letter + str(row)].value == '0'):
 			error_rows.add(row)
 
@@ -153,7 +153,7 @@ def _commerce_filter(input_sheet):
 			if status == 'undelivered' and sub_status == 'undelivered':
 				for col in range(1, input_sheet.max_column + 1):
 					col_letter = openpyxl.cell.cell.get_column_letter(col)
-					filtered_sheet[col_letter + str(filtered_row)] = input_sheet[col_letter + str(row)].value
+					filtered_sheet[col_letter + str(filtered_row)] = input_sheet[col_letter + str()].value
 				filtered_row += 1
 				count += 1
 	print('Found {} open orders.'.format(count))

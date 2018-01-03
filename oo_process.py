@@ -6,7 +6,6 @@ from oo_functions import *
 import datetime
 import sys
 import sqlite3
-import pymysql
 import os
 
 def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
@@ -14,8 +13,19 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 	conn = sqlite3.connect('star_interactive.db')
 	cur = conn.cursor()
 
+	# Main Output Sheet
 	output_wb = openpyxl.Workbook()
 	output_sheet = output_wb.active
+
+	# Star Interactive Sheet
+	star_wb = openpyxl.Workbook()
+	star_sheet = star_wb.active
+	star_row = 2	# First row after header columns
+
+	# SBW Sheet
+	sbw_wb = openpyxl.Workbook()
+	sbw_sheet = sbw_wb.active
+	sbw_row = 2		# First row after header columns
 
 	# write columns for new output wb, set col. width
 	col_width = 20
@@ -24,8 +34,15 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 	format_sheet = format_wb.active
 	for col in range(1, format_sheet.max_column + 1):
 		col_letter = openpyxl.cell.cell.get_column_letter(col)
+		
 		output_sheet[col_letter + str(1)] = format_sheet[col_letter + str(1)].value
 		output_sheet.column_dimensions[col_letter].width = col_width
+
+		star_sheet[col_letter + str(1)] = format_sheet[col_letter + str(1)].value
+		star_sheet.column_dimensions[col_letter].width = col_width
+
+		sbw_sheet[col_letter + str(1)] = format_sheet[col_letter + str(1)].value
+		sbw_sheet.column_dimensions[col_letter].width = col_width
 
 	final_col = format_sheet.max_column + 1
 
@@ -55,15 +72,47 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 		output_sheet, offset, error_rows = process_sheet(staples_file, final_col, output_sheet, staples_dict,
 			offset, cur, error_rows)
 
-
-	today = datetime.date.today()
-	output_file = today.strftime("%m-%d-%Y") + " ORDERS.xlsx"
+	# Writing output XLSX files
+	today = datetime.date.today().strftime("%m-%d-%Y")
+	output_file = "ORDERS {}.xlsx".format(today)
+	star_file = "STAR {}.xlsx".format(today)
+	sbw_file = "SBW {}.xlsx".format(today)
 	dir_path = os.path.join(os.getcwd(), 'Output Sheets')
 	os.makedirs(dir_path, exist_ok=True)
 	output_wb.save(os.path.join(dir_path, output_file))
+
+	# Splitting into separate Star Interactive and SBW Sheets
+	print('Splitting into Star Interactive and SBW Sheets...')
+	sbw_skus = ['X', 'SIG']
+	for row in range(2, output_sheet.max_row + 1):
+		sbw_true = False
+		order_sku = output_sheet['CR' + str(row)].value
+		for sbw_sku in sbw_skus:
+			if order_sku.startswith(sbw_sku):
+				sbw_true = True
+				for col in range(1, output_sheet.max_column + 1):
+					col_letter = openpyxl.cell.cell.get_column_letter(col)
+					sbw_sheet[col_letter + str(sbw_row)] = output_sheet[col_letter + str(row)].value
+				sbw_row += 1
+				break
+		if not sbw_true:
+			for col in range(1, output_sheet.max_column + 1):
+				col_letter = openpyxl.cell.cell.get_column_letter(col)
+				star_sheet[col_letter + str(star_row)] = output_sheet[col_letter + str(row)].value
+			star_row += 1
+
+	if star_sheet.max_row > 1:
+		star_wb.save(os.path.join(dir_path, star_file))
+		print('Star Interactive sheet writen.')
+	
+	if sbw_sheet.max_row > 1:
+		sbw_wb.save(os.path.join(dir_path, sbw_file))
+		print('SBW sheet writen.')
 	
 	print('Done.')
 	print('Total SKUs:', output_sheet.max_row - 1)
+	print('Star Interactive SKUs', star_sheet.max_row - 1)
+	print('SBW SKUs', sbw_sheet.max_row - 1)
 	print('-----')
 	for row in error_rows:
 		print('WARNING! Potential error on row', row)

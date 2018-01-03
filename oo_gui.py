@@ -5,8 +5,6 @@ from PyQt5.QtGui import (QIcon, QColor)
 from PyQt5.QtCore import QObject, pyqtSignal
 import os
 import oo_process
-#from PyQt5.QtWidgets import *
-#from PyQt5.QtGui import *
 
 class OrderOpener(QMainWindow):
 
@@ -189,4 +187,3 @@ if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	run = OrderOpener()
 	sys.exit(app.exec_())
-
