@@ -2,10 +2,7 @@
 
 <img src="oo_pic.PNG"></img>
 
-A GUI application to automate the opening of orders to Lean Supply warehouse.
-Takes order queries from CommerceHub (Walmart, Best Buy, Staples), CommerceHub CA (The Source), Groupon, and Staples 
-as inputs and combines them into a single output sheet formatted in a way that Lean Supply will accept.
-Connects to a sqlite database to fetch information on SKU and UPC codes.
+A GUI application to automate the opening of orders to Lean Supply warehouse. Takes order queries from CommerceHub (Walmart, Best Buy, Staples), CommerceHub CA (The Source), Groupon, and Staples as inputs and combines them into a single output sheet formatted in a way that Lean Supply will accept. Connects to a sqlite database to fetch information on SKU and UPC codes.
  
 ## To-Do:
 - Add Commercehub (CA)
