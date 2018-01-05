@@ -58,7 +58,7 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 
 	if commerce2_file:
 		print('Adding CommerceHub (CA)')
-		output_sheet, offset, error_rows = process_sheet(commerce2_file, final_col, output_sheet, commercehub_dict,
+		output_sheet, offset, error_rows = process_sheet(commerce2_file, final_col, output_sheet, commercehub2_dict,
 			offset, cur, error_rows, commerce_true=True)
 
 

@@ -94,10 +94,13 @@ def process_sheet(wb_file, final_col, output_sheet, vendor_dict,
 		for col in range(1, final_col):
 			try:
 				col_letter = openpyxl.cell.cell.get_column_letter(col)
-				if (vendor_dict[col_letter] == None or vendor_dict[col_letter] == NA or vendor_dict[col_letter] == 'US'
+				if (vendor_dict[col_letter] == None
+				 or vendor_dict[col_letter] == NA or vendor_dict[col_letter] == 'US'
 				 or vendor_dict[col_letter] == 'NEED DATE'
-				 or vendor_dict[col_letter] == 'Canada Post - Expedited Parcel' or vendor_dict[col_letter] == 'CA'
-				 or vendor_dict[col_letter] == 'IGNORE ME' or vendor_dict[col_letter] == 'Groupon' or vendor_dict[col_letter] == 'Staples'):
+				 or vendor_dict[col_letter] == 'Canada Post - Expedited Parcel'
+				 or vendor_dict[col_letter] == 'ATS/TForce Integrated Solutions'
+				 or vendor_dict[col_letter] == 'IGNORE ME'
+				 or vendor_dict[col_letter] == 'Groupon' or vendor_dict[col_letter] == 'Staples'):
 					output_sheet[col_letter + str(row + offset)] = vendor_dict[col_letter]
 				else:
 					output_sheet[col_letter + str(row + offset)] = str(input_sheet[vendor_dict[col_letter] + str(row)].value)
@@ -153,7 +156,7 @@ def _commerce_filter(input_sheet):
 			if status == 'undelivered' and sub_status == 'undelivered':
 				for col in range(1, input_sheet.max_column + 1):
 					col_letter = openpyxl.cell.cell.get_column_letter(col)
-					filtered_sheet[col_letter + str(filtered_row)] = input_sheet[col_letter + str()].value
+					filtered_sheet[col_letter + str(filtered_row)] = input_sheet[col_letter + str(row)].value
 				filtered_row += 1
 				count += 1
 	print('Found {} open orders.'.format(count))
