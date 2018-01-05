@@ -1,7 +1,7 @@
 import os
 import datetime
 import openpyxl
-import pymysql
+#import pymysql
 from oo_dicts import *
 import csv
 
