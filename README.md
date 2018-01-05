@@ -15,6 +15,7 @@ A GUI application to automate the opening of orders to Lean Supply warehouse. Ta
 - ~~Automate Commercehub steps~~
    - ~~Filter out opened, acknowledged, closed orders~~
    - ~~Split into two separate sheets for Star Interactive and SBW~~
+   - Create a checkbox to process testing sheets
 - Backorder checks
    - Check sku orders against current inventory
    - Generate report of backorders in each order
