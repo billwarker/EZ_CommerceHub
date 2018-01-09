@@ -96,6 +96,7 @@ def process_sheet(wb_file, final_col, output_sheet, vendor_dict,
 				col_letter = openpyxl.cell.cell.get_column_letter(col)
 				if (vendor_dict[col_letter] == None
 				 or vendor_dict[col_letter] == NA or vendor_dict[col_letter] == 'US'
+				 or vendor_dict[col_letter] == CA
 				 or vendor_dict[col_letter] == 'NEED DATE'
 				 or vendor_dict[col_letter] == 'Canada Post - Expedited Parcel'
 				 or vendor_dict[col_letter] == 'ATS/TForce Integrated Solutions'
