@@ -7,10 +7,11 @@ import datetime
 import sys
 import sqlite3
 import os
+from settings import *
 
 def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 	# connect to db for SKUs and UPCs
-	conn = sqlite3.connect('star_interactive.db')
+	conn = sqlite3.connect(DATABASE)
 	cur = conn.cursor()
 
 	# Main Output Sheet
@@ -83,23 +84,38 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 
 	# Splitting into separate Star Interactive and SBW Sheets
 	print('Splitting into Star Interactive and SBW Sheets...')
-	sbw_skus = ['X', 'SIG']
+	
 	for row in range(2, output_sheet.max_row + 1):
-		sbw_true = False
+		
 		order_sku = output_sheet['CR' + str(row)].value
-		for sbw_sku in sbw_skus:
-			if order_sku.startswith(sbw_sku):
-				sbw_true = True
-				for col in range(1, output_sheet.max_column + 1):
-					col_letter = openpyxl.cell.cell.get_column_letter(col)
-					sbw_sheet[col_letter + str(sbw_row)] = output_sheet[col_letter + str(row)].value
-				sbw_row += 1
-				break
-		if not sbw_true:
+		star_check = cur.execute("SELECT 1 FROM star_inventory WHERE item_sku = ?", (order_sku,)).fetchall()
+		sbw_check = cur.execute("SELECT 1 FROM sbw_inventory WHERE item_sku = ?", (order_sku,)).fetchall()
+
+		if star_check and sbw_check:
+			print("{} exists in both STAR and SBW tables - sorting based off of UPC code.".format(order_sku))
+			order_upc = output_sheet['CQ' + str(row)].value
+			star_upc_check = cur.execute("SELECT 1 FROM star_inventory WHERE item_upc = ?", (order_upc,)).fetchall()
+			if star_upc_check:
+				sbw_check = False
+				print('UPC found in STAR table - going with STAR SKU')
+			else:
+				star_check = False
+				print('UPC not found in STAR table - defaulting to SBW SKU')
+
+		if star_check:	
 			for col in range(1, output_sheet.max_column + 1):
 				col_letter = openpyxl.cell.cell.get_column_letter(col)
 				star_sheet[col_letter + str(star_row)] = output_sheet[col_letter + str(row)].value
 			star_row += 1
+
+		elif sbw_check:
+			for col in range(1, output_sheet.max_column + 1):
+				col_letter = openpyxl.cell.cell.get_column_letter(col)
+				sbw_sheet[col_letter + str(sbw_row)] = output_sheet[col_letter + str(row)].value
+			sbw_row += 1
+			
+		else:
+			print("WARNING: {} NOT FOUND IN DATABASE".format(order_sku))
 
 	if star_sheet.max_row > 1:
 		star_wb.save(os.path.join(dir_path, star_file))

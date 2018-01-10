@@ -11,11 +11,9 @@ A GUI application to automate the opening of orders to Lean Supply warehouse. Ta
 - PyQt5
 
 ## To-Do:
-- ~~Add Commercehub (CA)~~
-- ~~Automate Commercehub steps~~
-   - ~~Filter out opened, acknowledged, closed orders~~
-   - ~~Split into two separate sheets for Star Interactive and SBW~~
-   - Create a checkbox to process testing sheets
+- Database folder created
+   - Manage relative path of database
+   - Automated updating via webscraping from Harmony 4PL
 - Backorder checks
    - Check sku orders against current inventory
    - Generate report of backorders in each order

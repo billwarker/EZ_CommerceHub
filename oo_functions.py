@@ -69,17 +69,29 @@ def _check_errors(row, final_col, output_sheet, error_rows):
 			or output_sheet[col_letter + str(row)].value == '0'):
 			error_rows.add(row)
 
-def _mysql_lookup(row, output_sheet, cur):
-	row_sku = output_sheet["CR" + str(row)].value
-	try:
-		cur.execute("SELECT item_upc FROM inventory WHERE item_sku = ?;",
-			(row_sku,))
-		row_upc = cur.fetchone()[0]
-		#print(query.format(row_sku))
-		print('Grabbed UPC from database for', row_sku)
-		output_sheet["CQ" + str(row)] = str(row_upc)
-	except Exception as e:
-		print(e)
+def _sql_lookup(row, output_sheet, cur, commerce_true):
+	if not commerce_true:
+		row_sku = output_sheet["CR" + str(row)].value
+		star_check = cur.execute("SELECT 1 FROM star_inventory WHERE item_sku = ?", (row_sku,)).fetchall()
+		sbw_check = cur.execute("SELECT 1 FROM sbw_inventory WHERE item_sku = ?", (row_sku,)).fetchall()
+		
+		try:
+			if star_check:
+				cur.execute("SELECT item_upc FROM star_inventory WHERE item_sku = ?;",
+				(row_sku,))
+				table = 'STAR'
+			
+			elif sbw_check:
+				cur.execute("SELECT item_upc FROM sbw_inventory WHERE item_sku = ?;",
+				(row_sku,))
+				table = 'SBW'
+
+			row_upc = cur.fetchone()[0]
+			print('Grabbed UPC from {} table for {}'.format(table, row_sku))
+			output_sheet["CQ" + str(row)] = str(row_upc)
+
+		except Exception as e:
+			print(e)
 
 def process_sheet(wb_file, final_col, output_sheet, vendor_dict,
 	offset, cur, error_rows, groupon_true=False, commerce_true=False):
@@ -112,8 +124,8 @@ def process_sheet(wb_file, final_col, output_sheet, vendor_dict,
 		if groupon_true:
 			_grab_skus_upc(row + offset, output_sheet)
 
-		_mysql_lookup((row + offset), output_sheet, cur)
-		_check_errors((row + offset), final_col, output_sheet, error_rows)
+		_sql_lookup((row + offset), output_sheet, cur, commerce_true)
+		#_check_errors((row + offset), final_col, output_sheet, error_rows)
 
 	offset += last_row - 1
 
