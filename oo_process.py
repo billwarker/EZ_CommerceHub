@@ -7,7 +7,7 @@ import datetime
 import sys
 import sqlite3
 import os
-from settings import *
+from oo_settings import *
 
 def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 	# connect to db for SKUs and UPCs
