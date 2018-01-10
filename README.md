@@ -11,9 +11,10 @@ A GUI application to automate the opening of orders to Lean Supply warehouse. Ta
 - PyQt5
 
 ## To-Do:
-- Database folder created
+- ~~Database folder created~~
    - Manage relative path of database
    - Automated updating via webscraping from Harmony 4PL
+- Error catching: test for missing UPC, SKU, required shipping columns on main sheet before splitting
 - Backorder checks
    - Check sku orders against current inventory
    - Generate report of backorders in each order
