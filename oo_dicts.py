@@ -1,6 +1,6 @@
 ### HANDLING NULLS
 NA = None
-CA = 'CA'
+CA = 'CAN'
 
 ### COMMERCEHUB
 commercehub_dict = {'A': None,
