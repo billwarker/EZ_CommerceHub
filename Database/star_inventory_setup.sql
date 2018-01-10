@@ -1,4 +1,4 @@
-CREATE TABLE inventory
+CREATE TABLE star_inventory
 (item_num INT PRIMARY KEY NOT NULL,
 item_sku VARCHAR(255),
 item_desc VARCHAR(255),

@@ -1,3 +1,5 @@
 *.csv
 Excel Sheets
 Output Sheets
+__pycache__
+desktop.ini
