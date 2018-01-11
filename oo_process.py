@@ -10,6 +10,9 @@ import os
 from oo_settings import *
 
 def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
+	
+	### SET-UP ------------------------------------------------------
+
 	# connect to db for SKUs and UPCs
 	conn = sqlite3.connect(DATABASE)
 	cur = conn.cursor()
@@ -28,7 +31,9 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 	sbw_sheet = sbw_wb.active
 	sbw_row = 2		# First row after header columns
 
-	# write columns for new output wb, set col. width
+	### ======================================================================
+
+	### FORMATTING SHEETS ----------------------------------------------------
 	col_width = 20
 	format_file = "oo_formatSheet.xlsx" # Always use this spreadsheet as the template for the column names/formatting
 	format_wb = openpyxl.load_workbook(format_file)
@@ -52,6 +57,10 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 	# error_rows for final checking
 	error_rows = set()
 
+	### ======================================================================
+
+	### PROCESSING --------------------------------------------------------
+
 	if commerce_file:
 		print('Adding CommerceHub')
 		output_sheet, offset, error_rows = process_sheet(commerce_file, final_col, output_sheet, commercehub_dict,
@@ -73,6 +82,37 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 		output_sheet, offset, error_rows = process_sheet(staples_file, final_col, output_sheet, staples_dict,
 			offset, cur, error_rows)
 
+	### ======================================================================
+
+	### INVENTORY / BACKORDER CHECKING ---------------------------------------
+	
+	print('Checking current inventory against these new orders...')
+	sku_orders = dict()
+	for row in range(2, output_sheet.max_row + 1):	
+		order_sku = output_sheet['CR' + str(row)].value
+		order_qty = int(output_sheet['BM' + str(row)].value)
+		if order_sku not in sku_orders:
+			sku_orders[order_sku] = order_qty
+		else:
+			sku_orders[order_sku] = (order_qty + sku_orders[order_sku])
+
+	for sku in sku_orders.keys():
+		try:
+			current_inventory = cur.execute("SELECT item_inv FROM star_inventory WHERE item_sku = ?", (sku,)).fetchone()[0]
+			delta = current_inventory - sku_orders[sku]
+			if delta < 0:
+				print('BACKORDER WARNING: {} BACKORDERS ON {} WITH THIS ORDER.'.format(abs(delta), sku))
+			elif delta < 5:
+				print('INVENTORY WARNING: ONLY {} LEFT OF {} AFTER THIS ORDER.'.format(abs(delta), sku))
+		
+		except Exception as e:
+			print(e)
+
+
+	### ======================================================================
+
+	### SPLITTING INTO SEPARATE SBW AND STAR SHEETS ---------------------------
+
 	# Writing output XLSX files
 	today = datetime.date.today().strftime("%m-%d-%Y")
 	output_file = "ORDERS {}.xlsx".format(today)
@@ -82,7 +122,6 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 	os.makedirs(dir_path, exist_ok=True)
 	output_wb.save(os.path.join(dir_path, output_file))
 
-	# Splitting into separate Star Interactive and SBW Sheets
 	print('Splitting into Star Interactive and SBW Sheets...')
 	
 	for row in range(2, output_sheet.max_row + 1):
@@ -124,6 +163,10 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 	if sbw_sheet.max_row > 1:
 		sbw_wb.save(os.path.join(dir_path, sbw_file))
 		print('SBW sheet writen.')
+
+	### ======================================================================
+
+	### FINISHING -------------------------------------------------------------
 	
 	print('Done.')
 	print('Total SKUs:', output_sheet.max_row - 1)
@@ -135,3 +178,5 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 
 	cur.close()
 	conn.close()
+
+	### ======================================================================
