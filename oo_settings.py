@@ -1,5 +1,5 @@
 ### SETTINGS
 
-### relative path to star_interactive.db
+### absolute path to star_interactive.db
 
-DATABASE = r"Database\star_interactive.db"
+DATABASE = r"C:\Users\Will\Desktop\Exercises\Star Interactive\Database\star_interactive.db"
