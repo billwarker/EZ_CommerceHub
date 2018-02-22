@@ -169,7 +169,7 @@ commercehub2_dict = {'A': None,
  'BN': None,
  'BO': None,
  'BP': None,
- 'BQ': 'ATS/TForce Integrated Solutions',	# Shipping Method
+ 'BQ': 'BQ',						# Shipping Method
  'BR': 'BR',						# Ship to Address
  'BS': 'BS',						# Ship to Address 2
  'BT': 'BT',						# Ship to Address 3
