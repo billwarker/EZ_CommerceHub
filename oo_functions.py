@@ -62,6 +62,12 @@ def _order_dates(row, output_sheet):
 	output_sheet['BH'+ str(row)] = today.strftime("%m-%d-%Y")
 	output_sheet['BN'+ str(row)] = tomorrow.strftime("%m-%d-%Y")
 
+def _bestbuy_order_num(row, output_sheet, commerce_true):
+	if commerce_true:
+		if output_sheet['BD' + str(row)].value == 'Best Buy Canada':
+			output_sheet['AI' + str(row)] = output_sheet['BK' + str(row)].value
+			output_sheet['BK' + str(row)] = output_sheet['BI' + str(row)].value
+
 def _check_errors(row, final_col, output_sheet, error_rows):
 	for col in range(1, final_col):
 		col_letter = openpyxl.cell.cell.get_column_letter(col)
@@ -96,7 +102,7 @@ def _sql_lookup(row, output_sheet, cur, commerce_true):
 def process_sheet(wb_file, final_col, output_sheet, vendor_dict,
 	offset, cur, error_rows, groupon_true=False, commerce_true=False):
 	input_sheet = _csv_check(wb_file)
-	
+
 	if commerce_true:
 		input_sheet = _commerce_filter(input_sheet)
 
@@ -125,6 +131,7 @@ def process_sheet(wb_file, final_col, output_sheet, vendor_dict,
 			_grab_skus_upc(row + offset, output_sheet)
 
 		_sql_lookup((row + offset), output_sheet, cur, commerce_true)
+		_bestbuy_order_num((row + offset), output_sheet, commerce_true)
 		#_check_errors((row + offset), final_col, output_sheet, error_rows)
 
 	offset += last_row - 1
