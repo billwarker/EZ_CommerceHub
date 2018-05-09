@@ -9,7 +9,7 @@ import sqlite3
 import os
 from oo_settings import *
 
-def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
+def process_output(groupon_file, commerce_file, staples_file, commerce2_file, test_state):
 	
 	### SET-UP ------------------------------------------------------
 
@@ -116,11 +116,12 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 	# Writing output XLSX files
 	today = datetime.date.today().strftime("%m-%d-%Y")
 	output_file = "ORDERS {}.xlsx".format(today)
+	test_file = "TEST {}.xlsx".format(today)
 	star_file = "STAR {}.xlsx".format(today)
 	sbw_file = "SBW {}.xlsx".format(today)
 	dir_path = os.path.join(os.getcwd(), 'Output Sheets')
 	os.makedirs(dir_path, exist_ok=True)
-	output_wb.save(os.path.join(dir_path, output_file))
+	#output_wb.save(os.path.join(dir_path, output_file))
 
 	print('Splitting into Star Interactive and SBW Sheets...')
 	
@@ -156,13 +157,21 @@ def process_output(groupon_file, commerce_file, staples_file, commerce2_file):
 		else:
 			print("WARNING: {} NOT FOUND IN DATABASE".format(order_sku))
 
-	if star_sheet.max_row > 1:
-		star_wb.save(os.path.join(dir_path, star_file))
-		print('Star Interactive sheet writen.')
-	
-	if sbw_sheet.max_row > 1:
-		sbw_wb.save(os.path.join(dir_path, sbw_file))
-		print('SBW sheet writen.')
+	if not test_state:
+
+		output_wb.save(os.path.join(dir_path, output_file))
+
+		if star_sheet.max_row > 1:
+			star_wb.save(os.path.join(dir_path, star_file))
+			print('Star Interactive sheet written.')
+		
+		if sbw_sheet.max_row > 1:
+			sbw_wb.save(os.path.join(dir_path, sbw_file))
+			print('SBW sheet written.')
+	else:
+		output_wb.save(os.path.join(dir_path, test_file))
+		print('Test sheet written.')
+
 
 	### ======================================================================
 

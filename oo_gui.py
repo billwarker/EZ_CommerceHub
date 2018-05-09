@@ -29,6 +29,12 @@ class OrderOpener(QMainWindow):
 		clearSheetsAct.triggered.connect(self.clear_sheets)
 		optionMenu.addAction(clearSheetsAct)
 
+		# Test Sheet
+		self.test_state = False
+		testSheetAct = QAction('Test Mode', self, checkable=True)
+		testSheetAct.triggered.connect(self.toggleTest)
+		optionMenu.addAction(testSheetAct)
+
 		statusbar = self.statusBar()
 		statusbar.showMessage('No sheets added.')
 
@@ -41,6 +47,11 @@ class OrderOpener(QMainWindow):
 		label_height = 90
 		box_h = 65
 		box_offset = program_w / 10
+
+		# Test Label
+		self.testLabel = QLabel('Test Mode', self)
+		self.testLabel.move(program_w - 60, 15)
+		self.testLabel.hide()
 
 		# Groupon
 		self.grouponBox = QFrame(self)
@@ -159,7 +170,7 @@ class OrderOpener(QMainWindow):
 		if self.sheetCheck:
 			self.statusBar().showMessage('Processing sheet...')
 			oo_process.process_output(self.grouponPath, self.commercehubPath,
-				self.staplesPath, self.commercehub2Path)
+				self.staplesPath, self.commercehub2Path, self.test_state)
 			self.statusBar().showMessage('Done!')
 
 		else:
@@ -181,6 +192,16 @@ class OrderOpener(QMainWindow):
 		self.grey.name())
 		self.statusBar().showMessage('Sheets cleared!')
 
+	def toggleTest(self, state):
+		if state:
+			self.test_state = True
+			self.testLabel.show()
+			#self.statusBar().showMessage('Test Mode: ON')
+
+		else:
+			self.test_state = False
+			self.testLabel.hide()
+			#self.statusBar().showMessage('Test Mode: OFF')
 
 if __name__ == '__main__':
 	
