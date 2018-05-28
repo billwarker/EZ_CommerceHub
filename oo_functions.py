@@ -56,6 +56,18 @@ def _grab_skus_upc(row, output_sheet):
 		# SKU
 		output_sheet['CR'+ str(row)] = 'OI-200'
 
+	elif product_desc.startswith('APL-FE235'):
+		# UPC
+		output_sheet['CQ'+ str(row)] = '646437383486'
+		# SKU
+		output_sheet['CR'+ str(row)] = 'APL-FE235'
+
+	elif product_desc.startswith('XT60TRB'):
+		# UPC
+		output_sheet['CQ'+ str(row)] = '818795012319'
+		# SKU
+		output_sheet['CR'+ str(row)] = 'XT60TRB'
+
 def _order_dates(row, output_sheet):
 	today = datetime.date.today()
 	tomorrow = datetime.date.today() + datetime.timedelta(days=1)
